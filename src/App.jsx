@@ -1,28 +1,32 @@
-import { useState } from 'react'
+import { useRef, useState } from "react";
+import HeaderNav from "./components/HeaderNav";
+import HeroSearch from "./components/HeroSearch";
+import MapAndList from "./components/MapAndList";
+import BookingCalculator from "./components/BookingCalculator";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [section, setSection] = useState("dashboard");
+  const mapRef = useRef(null);
+
+  const handleNavigate = (key) => {
+    setSection(key);
+    if (key === "map" && mapRef.current) {
+      mapRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold text-gray-800 mb-4">
-          Vibe Coding Platform
-        </h1>
-        <p className="text-gray-600 mb-6">
-          Your AI-powered development environment
-        </p>
-        <div className="text-center">
-          <button
-            onClick={() => setCount(count + 1)}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
-          >
-            Count is {count}
-          </button>
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-sky-50 text-slate-900">
+      <HeaderNav onNavigate={handleNavigate} />
+      <main>
+        <HeroSearch onExplore={() => handleNavigate("map")} />
+        <div ref={mapRef}>
+          <MapAndList />
         </div>
-      </div>
+        <BookingCalculator />
+      </main>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
